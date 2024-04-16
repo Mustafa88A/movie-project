@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
-import HomePage from "./components/HomePage";
 import { useDispatch } from "react-redux";
 import { getMovies } from "./store";
+import Contenar from "./components/Contenar";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -10,7 +10,7 @@ function App() {
   }, []);
   return (
     <div>
-      <HomePage />
+      <Contenar />
     </div>
   );
 }
