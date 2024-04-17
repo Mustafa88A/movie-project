@@ -2,37 +2,47 @@ import { createStore, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 
 let initalState = {
-  movies: [],
+  PopularMovies: [],
+  movieUpcooming: [],
 };
-// const ApiUrl = "https://api.themoviedb.org/3/movie/popular";
-// const ApiKey = "36e100c0555b58b480307c0b7e44b97b";
+// const PopularUrl = "https://api.themoviedb.org/3/movie/popular";
+const ApiKey = "36e100c0555b58b480307c0b7e44b97b";
 export function getMovies() {
-  return async function (dispatch) {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=36e100c0555b58b480307c0b7e44b97b`
-    );
-    const data = await res.json();
-    console.log(data.results);
-    // .then((res) => {
-    //   res.json();
-    //   console.log(res);
-    // })
-    // .then((data) => {
-    //   dispatch({ type: "movie/get", payload: data });
-    // });
+  return function (dispatch) {
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${ApiKey}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({ type: "movie/get", payload: data });
+        // console.log(data.results);
+      });
   };
 }
 
 export function movieReducer(state = initalState, action) {
+  // console.log("store state", state);
   switch (action.type) {
     case "movie/get":
-      return { ...state, movies: action.payload };
+      return { ...state, PopularMovies: action.payload };
+    case "movie/upcomming":
+      return { ...state, movieUpcooming: action.payload };
     default:
       break;
   }
   return state;
 }
 
+export function getMovieUpcooming() {
+  return function (dispatch) {
+    fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${ApiKey}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({ type: "movie/upcomming", payload: data.results });
+        // console.log(data.results);
+      });
+  };
+}
 const store = createStore(movieReducer, applyMiddleware(thunk));
 
 export default store;
+// fetch for popular
+//------------------------------------------------------------------------
